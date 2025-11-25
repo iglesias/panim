@@ -98,21 +98,31 @@ void ffmpeg_play_sound(Sound _sound, Wave wave)
 {
     (void)_sound;
 
-    if (
-        wave.sampleRate != FFMPEG_SOUND_SAMPLE_RATE      ||
-        wave.sampleSize != FFMPEG_SOUND_SAMPLE_SIZE_BITS ||
-        wave.channels   != FFMPEG_SOUND_CHANNELS
-    ) {
+    if (!(wave.sampleRate == 48000 || wave.sampleRate == 44100)) {
         TraceLog(LOG_ERROR,
-                 "Animation tried to play sound with rate: %dhz, sample size: %d bits, channels: %d. "
-                 "But we only support rate: %dhz, sample size: %d bits, channels: %d for now",
-                 wave.sampleRate, wave.sampleSize, wave.channels,
-                 FFMPEG_SOUND_SAMPLE_RATE, FFMPEG_SOUND_SAMPLE_SIZE_BITS, FFMPEG_SOUND_CHANNELS);
+                 "Animation tried to play a sound with a weird sample rate %dhz. "
+                 "Traditionally sample rates are either 48000hz or 44100hz.",
+                 wave.sampleRate);
         return;
     }
 
-    ffmpeg_wave = wave;
+    if (!(wave.sampleSize ==  8 || wave.sampleSize == 16 || wave.sampleSize == 32)) {
+        TraceLog(LOG_ERROR,
+                 "Animation tried to play a sound with a weird sample size of %d bits. "
+                 "We support only 8, 16, or 32 bits for now.",
+                 wave.sampleSize);
+        return;
+    }
+
+    UnloadWave(ffmpeg_wave);
+    ffmpeg_wave = WaveCopy(wave);
     ffmpeg_wave_cursor = 0;
+
+    if (
+        ffmpeg_wave.sampleRate != FFMPEG_SOUND_SAMPLE_RATE      ||
+        ffmpeg_wave.sampleSize != FFMPEG_SOUND_SAMPLE_SIZE_BITS ||
+        ffmpeg_wave.channels   != FFMPEG_SOUND_CHANNELS
+    ) WaveFormat(&ffmpeg_wave, FFMPEG_SOUND_SAMPLE_RATE, FFMPEG_SOUND_SAMPLE_SIZE_BITS, FFMPEG_SOUND_CHANNELS);
 }
 
 void preview_play_sound(Sound sound, Wave _wave)
