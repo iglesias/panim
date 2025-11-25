@@ -98,14 +98,6 @@ void ffmpeg_play_sound(Sound _sound, Wave wave)
 {
     (void)_sound;
 
-    if (!(wave.sampleRate == 48000 || wave.sampleRate == 44100)) {
-        TraceLog(LOG_ERROR,
-                 "Animation tried to play a sound with a weird sample rate %dhz. "
-                 "Traditionally sample rates are either 48000hz or 44100hz.",
-                 wave.sampleRate);
-        return;
-    }
-
     if (!(wave.sampleSize ==  8 || wave.sampleSize == 16 || wave.sampleSize == 32)) {
         TraceLog(LOG_ERROR,
                  "Animation tried to play a sound with a weird sample size of %d bits. "
