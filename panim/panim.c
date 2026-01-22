@@ -185,7 +185,7 @@ int main(int argc, char **argv)
     InitWindow(16*factor, 9*factor, "Panim");
     InitAudioDevice();
     SetTargetFPS(60);
-    SetExitKey(KEY_NULL);
+    SetExitKey(KEY_Q);
     plug_init();
 
     screen = LoadRenderTexture(FFMPEG_VIDEO_WIDTH, FFMPEG_VIDEO_HEIGHT);
@@ -252,7 +252,7 @@ int main(int argc, char **argv)
                 }
                 rendering_scene("Rendering Audio");
             } else {
-                if (IsKeyPressed(KEY_R)) {
+                if (IsKeyPressed(KEY_F)) {
                     SetTraceLogLevel(LOG_WARNING);
                     ffmpeg_video = ffmpeg_start_rendering_video("output.mp4", FFMPEG_VIDEO_WIDTH, FFMPEG_VIDEO_HEIGHT, FFMPEG_VIDEO_FPS);
                     plug_reset();
@@ -269,7 +269,7 @@ int main(int argc, char **argv)
                     if (IsKeyPressed(KEY_SPACE)) {
                         paused = !paused;
                     }
-                    if (IsKeyPressed(KEY_Q)) {
+                    if (IsKeyPressed(KEY_R)) {
                         plug_reset();
                     }
                     if (IsKeyPressed(KEY_PERIOD)) {
